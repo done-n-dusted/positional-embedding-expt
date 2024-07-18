@@ -1,1 +1,4 @@
 pos/
+*.ipynb
+.ipynb_checkpoints/
+__pycache__/
