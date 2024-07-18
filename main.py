@@ -5,9 +5,10 @@ from model import Model
 from tqdm import tqdm
 
 context_size = 10
-n_embed = 32
 n_hidden = 128
 xlen = 100
+num_epochs = 100
+
 rands = torch.randn(xlen)
 
 def break_contexts(rands):
@@ -19,20 +20,18 @@ def break_contexts(rands):
 
 dataloader = break_contexts(rands)
 
-model = Model(context_size, n_embed, n_hidden)
+model = Model(context_size, n_hidden)
 
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=5e-3)
 
 print("before training position encodings:")
 print(model.pos_encoder.positions)
-num_epochs = 1000
 for epoch in range(num_epochs):
     total_loss = 0
     for x, y in dataloader:
         optimizer.zero_grad()
         outputs = model(x)
-        # print(outputs, y)
         loss = criterion(outputs, y)
         loss.backward()
         optimizer.step()
